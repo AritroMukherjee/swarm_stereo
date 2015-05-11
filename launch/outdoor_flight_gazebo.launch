@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<launch>
+   
+  <!-- Start Gazebo with wg world running in (max) realtime -->
+  <include file="$(find hector_gazebo_worlds)/launch/rolling_landscape_120m.launch"/>
+
+  <arg name="model" value="$(find swarm_stereo)/urdf/octorotor_with_asus.gazebo.xacro"/> 
+  <arg name="model1" value="$(find hector_quadrotor_description)/urdf/quadrotor_with_asus.gazebo.xacro"/> 
+
+  <group ns="uav1">
+     <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
+       <arg name="name" value="uav1" />
+       <arg name="tf_prefix" value="uav1" />
+       <arg name="model" value="$(arg model)" />
+       <arg name="y" value="-1.0" />
+     </include>
+  </group>
+
+  <group ns="uav2">
+	<include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
+      <arg name="name" value="uav2" />
+      <arg name="tf_prefix" value="uav2" />
+      <arg name="model" value="$(arg model)" />
+      <arg name="y" value="1.0" />
+    </include>
+  </group>   
+ 
+  <group ns="uav3">
+	<include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
+      <arg name="name" value="uav3" />
+      <arg name="tf_prefix" value="uav3" />
+      <arg name="model" value="$(arg model1)" />
+      <arg name="y" value="3.0" />
+    </include>
+  </group>   
+   
+
+</launch>

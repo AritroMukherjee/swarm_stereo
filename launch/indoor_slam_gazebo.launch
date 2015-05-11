@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<launch>
+   
+  <!-- Start Gazebo with wg world running in (max) realtime -->
+  <include file="$(find hector_gazebo_worlds)/launch/willow_garage.launch"/>
+
+  <arg name="model" value="$(find hector_quadrotor_description)/urdf/octorotor_with_asus.gazebo.xacro"/> 
+
+  <group ns="uav1">
+     <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
+       <arg name="name" value="uav1" />
+       <arg name="tf_prefix" value="uav1" />
+       <arg name="model" value="$(arg model)" />
+       <arg name="y" value="-1.0" />
+     </include>
+  </group>
+
+  <group ns="uav2">
+	<include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
+      <arg name="name" value="uav2" />
+      <arg name="tf_prefix" value="uav2" />
+      <arg name="model" value="$(arg model)" />
+      <arg name="y" value="1.0" />
+    </include>
+  </group>   
+ 
+  <group ns="uav3">
+	<include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
+      <arg name="name" value="uav3" />
+      <arg name="tf_prefix" value="uav3" />
+      <arg name="model" value="$(arg model)" />
+      <arg name="y" value="3.0" />
+    </include>
+  </group>   
+  
+  <!-- Start SLAM system -->
+  <include file="$(find hector_mapping)/launch/mapping_default.launch">
+    <arg name="odom_frame" value="world"/>
+  </include>
+ 
+  <!-- Start GeoTIFF mapper -->
+  <include file="$(find hector_geotiff)/launch/geotiff_mapper.launch">
+    <arg name="trajectory_publish_rate" value="4"/> 
+  </include>
+  
+  <!-- Start rviz visualization with preset config -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find hector_quadrotor_demo)/rviz_cfg/indoor_slam.rviz"/>
+   
+</launch>
