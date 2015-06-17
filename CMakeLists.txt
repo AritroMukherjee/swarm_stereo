@@ -5,6 +5,8 @@ project(swarm_stereo)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  image_transport
+  cv_bridge
   hector_gazebo_worlds
   hector_quadrotor_gazebo
   hector_quadrotor_description
@@ -103,16 +105,16 @@ include_directories(
 # )
 
 ## Declare a cpp executable
-# add_executable(swarm_stereo_node src/swarm_stereo_node.cpp)
+add_executable(swarm_stereo_node src/swarm_stereo.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(swarm_stereo_node swarm_stereo_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(swarm_stereo_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(swarm_stereo_node
+   ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##
