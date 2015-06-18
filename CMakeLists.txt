@@ -7,9 +7,9 @@ project(swarm_stereo)
 find_package(catkin REQUIRED COMPONENTS
   image_transport
   cv_bridge
-  hector_gazebo_worlds
-  hector_quadrotor_gazebo
-  hector_quadrotor_description
+#  hector_gazebo_worlds
+#  hector_quadrotor_gazebo
+#  hector_quadrotor_description
 )
 
 ## System dependencies are found with CMake's conventions

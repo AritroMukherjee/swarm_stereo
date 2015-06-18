@@ -12,6 +12,9 @@ double sec;
 double fps;
 // fps counter end
 
+#define DISPLAY 0
+#define NO_DISPLAY 0
+
 void imageCallback(const sensor_msgs::ImageConstPtr& msg)
 {
     try
@@ -20,8 +23,13 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
         if (counter == 0){
             time(&start);
         }
+	#ifdef NO_DISPLAY
+		cv::Mat img = cv_bridge::toCvShare(msg,"bgr8")->image;
+	#endif
         // fps counter end
+	#ifdef DISPLAY
 		cv::imshow("view", cv_bridge::toCvShare(msg, "bgr8")->image);
+	#endif
 		// fps counter begin
         time(&end);
         counter++;
@@ -48,9 +56,7 @@ int main(int argc, char **argv)
     cv::startWindowThread();
     image_transport::ImageTransport it(nh);
     image_transport::Subscriber sub = it.subscribe("/ros_pleora/image_raw", 1, imageCallback);
-
 	
-
 	while(nh.ok())
 		ros::spin();
     cv::destroyWindow("view");
