@@ -3,7 +3,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <time.h> 
-
+#include <opencv2/gpu/gpu.hpp>
 
 // fps counter begin
 time_t start, end;
@@ -12,8 +12,8 @@ double sec;
 double fps;
 // fps counter end
 
-#define DISPLAY 0
-#define NO_DISPLAY 0
+#define NO_DISPLAY 1
+//#define NO_DISPLAY 0
 
 void imageCallback(const sensor_msgs::ImageConstPtr& msg)
 {
@@ -24,7 +24,9 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
             time(&start);
         }
 	#ifdef NO_DISPLAY
-		cv::Mat img = cv_bridge::toCvShare(msg,"bgr8")->image;
+		cv::Mat img = cv_bridge::toCvShare(msg,"bayer_bggr8")->image;
+		cv::gpu::GpuMat rgb,image(img);
+		cv::gpu::demosaicing(image,rgb,cv::COLOR_BayerBG2BGR);
 	#endif
         // fps counter end
 	#ifdef DISPLAY
@@ -40,7 +42,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
         // overflow protection
         if (counter == (INT_MAX - 1000))
             counter = 0;	
-		cv::waitKey(10);
+		cv::waitKey(1);
     }
     catch (cv_bridge::Exception& e)
     {
